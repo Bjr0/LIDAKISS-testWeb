@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<!-- 基础图标 - 相对路径（HTML和my-favicon同级） -->
+	<link rel="icon" type="image/png" href="./my-favicon/favicon-96x96.png" sizes="96x96" />
+	<link rel="icon" type="image/svg+xml" href="./my-favicon/favicon.svg" />
+	<link rel="shortcut icon" href="./my-favicon/favicon.ico" />
+	<!-- iOS图标 -->
+	<link rel="apple-touch-icon" sizes="180x180" href="./my-favicon/apple-touch-icon.png" />
+	<meta name="apple-mobile-web-app-title" content="LIDAKIS" />
+	<!-- PWA配置 -->
+	<link rel="manifest" href="./my-favicon/site.webmanifest" />
+	
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIDAKISS</title>
+    <!-- 引入外部样式（字体+图标） -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 全局样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+        a {
+            text-decoration: none;
+            color: #333;
+        }
+        ul {
+            list-style: none;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 导航栏样式 */
+        header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+        .nav-wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .logo span {
+            color: #e74c3c;
+        }
+        .nav-list {
+            display: flex;
+            gap: 30px;
+        }
+        .nav-list li a {
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        .nav-list li a:hover {
+            color: #e74c3c;
+        }
+        .nav-icon {
+            display: flex;
+            gap: 20px;
+        }
+        .nav-icon a {
+            font-size: 18px;
+            color: #666;
+            transition: color 0.3s;
+            cursor: pointer; /* 添加鼠标指针样式 */
+        }
+        .nav-icon a:hover {
+            color: #e74c3c;
+        }
+        /* 移动端导航按钮 */
+        .menu-btn {
+            display: none;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        /* 轮播图样式 */
+        .banner {
+            height: 500px;
+            background: #f5f5f5;
+            overflow: hidden;
+            position: relative;
+        }
+        .banner-img {
+            width: 100%;
+            height: 100%;
+            background: url(https://picsum.photos/1920/500?random=1) no-repeat center center;
+            background-size: cover;
+            transition: all 0.5s;
+        }
+        .banner-text {
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            transform: translateY(-50%);
+            color: #fff;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        .banner-text h2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+        .banner-text p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            max-width: 500px;
+        }
+        .banner-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #e74c3c;
+            color: #fff;
+            border-radius: 50px;
+            transition: background 0.3s;
+        }
+        .banner-btn:hover {
+            background: #c0392b;
+        }
+
+        /* 商品分类标题 */
+        .title {
+            text-align: center;
+            margin: 60px 0 40px;
+        }
+        .title h3 {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .title p {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        /* 商品列表样式 */
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+        .product-item {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        .product-item:hover {
+            transform: translateY(-5px);
+        }
+        .product-img {
+            width: 100%;
+            height: 220px;
+            background: #f8f8f8;
+            overflow: hidden;
+        }
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .product-item:hover .product-img img {
+            transform: scale(1.05);
+        }
+        .product-info {
+            padding: 20px;
+        }
+        .product-name {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .product-desc {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .product-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* 关键：确保子元素垂直居中 */
+        }
+        .price {
+            font-size: 20px;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .add-cart {
+            display: inline-flex; /* 改为inline-flex确保垂直居中 */
+            align-items: center; /* 图标与文字垂直居中 */
+            padding: 8px 15px;
+            background: #2c3e50;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background 0.3s;
+            height: 36px; /* 固定按钮高度 */
+        }
+        .add-cart i {
+            margin-right: 5px; /* 图标与文字保持间距 */
+        }
+        .add-cart:hover {
+            background: #34495e;
+        }
+
+        /* 品牌介绍样式 */
+        .brand-intro {
+            background: #f9f9f9;
+            padding: 80px 0;
+            margin-bottom: 80px;
+        }
+        .intro-wrap {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+        .intro-img {
+            flex: 1;
+            min-width: 300px;
+        }
+        .intro-img img {
+            width: 100%;
+            border-radius: 8px;
+        }
+        .intro-text {
+            flex: 1;
+            min-width: 300px;
+        }
+        .intro-text h4 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .intro-text p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        /* 页脚样式 */
+        footer {
+            background: #2c3e50;
+            color: #fff;
+            padding: 60px 0 30px;
+        }
+        .footer-wrap {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h5 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .footer-col h5::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 40px;
+            height: 2px;
+            background: #e74c3c;
+        }
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        .footer-col ul li a {
+            color: #bdc3c7;
+            transition: color 0.3s;
+        }
+        .footer-col ul li a:hover {
+            color: #e74c3c;
+            padding-left: 5px;
+        }
+        .contact-info li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .social-icon {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .social-icon a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            border-radius: 50%;
+            background: #34495e;
+            color: #fff;
+            font-size: 18px;
+            transition: background 0.3s;
+        }
+        .social-icon a:hover {
+            background: #e74c3c;
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #34495e;
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+
+        /* 登录注册模态框样式 */
+        .modal {
+            display: none; /* 默认隐藏 */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: #fff;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+        .modal-title {
+            font-size: 20px;
+            color: #2c3e50;
+            text-align: center;
+        }
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+        }
+        .close-btn:hover {
+            color: #e74c3c;
+        }
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid #eee;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        .tab-btn.active {
+            color: #e74c3c;
+            border-bottom: 2px solid #e74c3c;
+        }
+        .tab-content {
+            padding: 25px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 14px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #e74c3c;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .submit-btn:hover {
+            background: #c0392b;
+        }
+        .form-footer {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .form-footer a {
+            color: #e74c3c;
+            margin-left: 5px;
+        }
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+        .tab-pane {
+            display: none;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .nav-list {
+                display: none;
+            }
+            .menu-btn {
+                display: block;
+            }
+            .banner {
+                height: 350px;
+            }
+            .banner-text h2 {
+                font-size: 28px;
+            }
+            .banner-text p {
+                font-size: 14px;
+            }
+            .title h3 {
+                font-size: 24px;
+            }
+            .intro-wrap {
+                gap: 30px;
+            }
+            .modal-content {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- 导航栏 -->
+<header>
+    <div class="container nav-wrap">
+        <!-- 左侧品牌名 -->
+        <a href="https://LIDAKISS.com" class="logo">力达克丝<span>LIDAKIS</span></a>
+        
+        <!-- 中间导航菜单 -->
+        <ul class="nav-list">
+            <li><a href="https://LIDAKISS.com">首页</a></li>
+            <li><a href="#">商品分类</a></li>
+            <li><a href="#">新品上市</a></li>
+            <li><a href="#">品牌故事</a></li>
+            <li><a href="#">联系我们</a></li>
+        </ul>
+        
+        <!-- 右侧功能图标区 -->
+        <div class="nav-right">
+            <div class="nav-icon">
+                <a href="#"><i class="fas fa-search"></i></a>
+                <a id="login-icon"><i class="fas fa-user"></i></a> <!-- 添加ID用于绑定事件 -->
+                <a href="#"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+            <!-- 移动端菜单按钮 -->
+            <div class="menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </div>
+</header>
+    <!-- 轮播图（简化版，实际可加JS轮播） -->
+    <section class="banner">
+        <div class="banner-img"></div>
+        <div class="banner-text">
+            <h2>2025新品系列 · 激情滑雪</h2>
+            <p>精选全球优质原料，融合极简设计美学，打造触手可及的高品质生活体验</p>
+            <a href="#" class="banner-btn">立即选购</a>
+        </div>
+    </section>
+
+    <!-- 商品展示区 -->
+    <section class="product-section">
+        <div class="container">
+            <!-- 标题（新增右侧"更多"按钮） -->
+            <div class="title"
+			 style="display: flex; 
+			 justify-content:space-between;
+			   align-items: center;
+				margin: 60px 0 40px;
+				 flex-wrap: wrap;
+				  gap: 15px;">
+                <div>
+                    <h3>热门商品</h3>
+                    <p>每一件商品，都是对滑雪的用心诠释</p>
+                </div>
+                <a href="/all-products.html" class="banner-btn" style="white-space: nowrap;">
+                    查看更多 <i class="fas fa-angle-right" style="margin-left: 5px;"></i>
+                </a>
+            </div>
+            <!-- 商品列表（保持不变） -->
+            <div class="product-list">
+                <!-- 商品1 -->
+                <div class="product-item">
+                    <div class="product-img">
+                        <img src="img/滑雪板.jpg">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-name">滑雪板</h4>
+                        <p class="product-desc">雪道上的颜值利刃，滑行自带高光滤镜</p>
+                        <div class="product-price">
+                            <span class="price">¥？？？</span>
+                            <a href="#" class="add-cart"><i class="fas fa-shopping-cart"></i> 加入购物车</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 商品2 -->
+                <div class="product-item">
+                    <div class="product-img">
+                        <img src="img/熊猫手套.jpg">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-name">滑雪手套</h4>
+                        <p class="product-desc">掌心的冬日暖炉，藏着滑雪的温柔浪漫</p>
+                        <div class="product-price">
+                            <span class="price">¥？？？</span>
+                            <a href="#" class="add-cart"><i class="fas fa-shopping-cart"></i> 加入购物车</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 商品3 -->
+                <div class="product-item">
+                    <div class="product-img">
+                        <img src="img/滑雪鞋.jpg">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-name">滑雪鞋</h4>
+                        <p class="product-desc">雪场颜值战袍，从脚下开始炸场</p>
+                        <div class="product-price">
+                            <span class="price">¥？？？</span>
+                            <a href="#" class="add-cart"><i class="fas fa-shopping-cart"></i> 加入购物车</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 商品4 -->
+                <div class="product-item">
+                    <div class="product-img">
+                        <img src="img/固定器G2302.jpg">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-name">滑雪鞋固定器</h4>
+                        <p class="product-desc">不止稳固，更是雪板上的颜值担当</p>
+                        <div class="product-price">
+                            <span class="price">¥？？？</span>
+                            <a href="#" class="add-cart"><i class="fas fa-shopping-cart"></i> 加入购物车</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 品牌介绍 -->
+    <section class="brand-intro">
+        <div class="container intro-wrap">
+            <div class="intro-img">
+                <img src="img/LOGO.jpg">
+            </div>
+            <div class="intro-text">
+                <h4>关于力达克丝</h4>
+                <p>力达克丝创立于2019年，我司凭借自主研发设计的单板滑雪装备体系，入围《中国冰雪旅游发展报告（2024）》评定的"冰雪装备十佳品牌"，产品线涵盖滑雪板、滑雪鞋及护具等全品类装备。</p>
+				<p> 我司通过融合国风元素进行产品创新，2024年推出的"雪"系列滑雪板实现单季超5000片销量，并远销日韩等国际市场。</p>
+				<p>在北京冬奥会举办背景下，我司2021年单板滑雪器材销量突破2万套，较往年增长80%，生产基地入驻宣化经济开发区冰雪产业园，形成研发制造一体化产业布局。</p>
+                <a href="#" class="banner-btn">了解更多</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-wrap">
+                <!-- 关于我们 -->
+                <div class="footer-col">
+                    <h5>关于我们</h5>
+                    <ul>
+                        <li><a href="https://LIDAKISSstory.com">品牌故事</a></li>
+                        <li><a href="#">企业愿景</a></li>
+                        <li><a href="#">加入我们</a></li>
+                        <li><a href="#">联系我们</a></li>
+                    </ul>
+                </div>
+                <!-- 购物指南 -->
+                <div class="footer-col">
+                    <h5>购物指南</h5>
+                    <ul>
+                        <li><a href="#">会员权益</a></li>
+                        <li><a href="#">支付方式</a></li>
+                        <li><a href="#">配送说明</a></li>
+                        <li><a href="#">退换政策</a></li>
+                    </ul>
+                </div>
+                <!-- 售后服务 -->
+                <div class="footer-col">
+                    <h5>售后服务</h5>
+                    <ul>
+                        <li><a href="#">售后流程</a></li>
+                        <li><a href="#">常见问题</a></li>
+                        <li><a href="#">投诉建议</a></li>
+                        <li><a href="#">维修服务</a></li>
+                    </ul>
+                </div>
+                <!-- 联系我们 -->
+                <div class="footer-col">
+                    <h5>联系我们</h5>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-envelope"></i>LIDAKIS@.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i>河北省张家口市宣化京奥园区</li>
+                    </ul>
+                    <div class="social-icon">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2025 力达克丝 All Rights Reserved. 冀ICP备XXXXXXXX号
+            </div>
+        </div>
+    </footer>
+
+    <!-- 登录注册模态框 -->
+    <div class="modal" id="auth-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">会员中心</h3>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="tab-container">
+                <div class="tab-btn active" data-tab="login">登录</div>
+                <div class="tab-btn" data-tab="register">注册</div>
+            </div>
+            <div class="tab-content">
+                <!-- 登录表单 -->
+                <div class="tab-pane active" id="login">
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="login-username">用户名/手机号</label>
+                            <input type="text" id="login-username" class="form-control" placeholder="请输入用户名或手机号" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">密码</label>
+                            <input type="password" id="login-password" class="form-control" placeholder="请输入密码" required>
+                        </div>
+                        <button type="submit" class="submit-btn">登录</button>
+                        <div class="form-footer">
+                            还没有账号？<a href="javascript:void(0)" class="switch-register">立即注册</a>
+                        </div>
+                    </form>
+                </div>
+                <!-- 注册表单 -->
+                <div class="tab-pane" id="register">
+                    <form id="register-form">
+                        <div class="form-group">
+                            <label for="register-username">用户名</label>
+                            <input type="text" id="register-username" class="form-control" placeholder="请设置用户名" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-phone">手机号</label>
+                            <input type="tel" id="register-phone" class="form-control" placeholder="请输入手机号" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">密码</label>
+                            <input type="password" id="register-password" class="form-control" placeholder="请设置密码" required>
+                        </div>
+                        <button type="submit" class="submit-btn">注册</button>
+                        <div class="form-footer">
+                            已有账号？<a href="javascript:void(0)" class="switch-login">立即登录</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 简单的JS（移动端菜单/轮播可扩展） -->
+    <script>
+        // 移动端菜单切换（可扩展）
+        const menuBtn = document.querySelector('.menu-btn');
+        const navList = document.querySelector('.nav-list');
+        menuBtn.addEventListener('click', () => {
+            navList.style.display = navList.style.display === 'flex' ? 'none' : 'flex';
+            navList.style.flexDirection = 'column';
+            navList.style.position = 'absolute';
+            navList.style.top = '70px';
+            navList.style.right = '5%';
+            navList.style.background = '#fff';
+            navList.style.padding = '20px';
+            navList.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+            navList.style.borderRadius = '8px';
+        });
+
+        // 轮播图自动切换（简化版，仅示例）
+        let bannerIndex = 1;
+        const bannerImg = document.querySelector('.banner-img');
+        setInterval(() => {
+            bannerIndex++;
+            if (bannerIndex > 3) bannerIndex = 1;
+            bannerImg.style.backgroundImage = `url(https://picsum.photos/1920/500?random=${bannerIndex})`;
+        }, 5000);
+
+        // 登录注册模态框相关功能
+        const modal = document.getElementById('auth-modal');
+        const loginIcon = document.getElementById('login-icon');
+        const closeBtn = document.querySelector('.close-btn');
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+        const switchRegister = document.querySelector('.switch-register');
+        const switchLogin = document.querySelector('.switch-login');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+
+        // 打开模态框
+        loginIcon.addEventListener('click', () => {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
+        });
+
+        // 关闭模态框
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // 恢复背景滚动
+        });
+
+        // 点击模态框外部关闭
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // 切换登录/注册标签
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 移除所有活跃状态
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabPanes.forEach(p => p.classList.remove('active'));
+                
+                // 添加当前活跃状态
+                btn.classList.add('active');
+                const tabId = btn.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // 切换到注册
+        switchRegister.addEventListener('click', () => {
+            tabBtns[1].click();
+        });
+
+        // 切换到登录
+        switchLogin.addEventListener('click', () => {
+            tabBtns[0].click();
+        });
+
+        // 登录表单提交
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // 这里添加登录逻辑
+            alert('登录功能待实现');
+        });
+
+        // 注册表单提交
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // 这里添加注册逻辑
+            alert('注册功能待实现');
+        });
+    </script>
+</body>
+</html>
